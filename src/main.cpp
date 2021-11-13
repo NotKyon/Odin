@@ -155,6 +155,12 @@ i32 linker_stage(lbGenerator *gen) {
 			LIT(target_arch_names[build_context.metrics.arch])
 		);
 #endif
+	} else if (build_context.cross_compiling && selected_target_metrics->metrics == &target_ps2_ee) {
+		result = system_exec_command_line_app("linker", "mips64r5900el-ps2-elf-gcc \"%.*s.o\" -o \"%.*s\" %.*s %.*s",
+			LIT(output_base), LIT(output_base), LIT(build_context.link_flags), LIT(build_context.extra_linker_flags));
+	} else if (build_context.cross_compiling && selected_target_metrics->metrics == &target_ps2_ee) {
+		result = system_exec_command_line_app("linker", "mipsel-ps2-irx-gcc \"%.*s.o\" -o \"%.*s\" %.*s %.*s",
+			LIT(output_base), LIT(output_base), LIT(build_context.link_flags), LIT(build_context.extra_linker_flags));
 	} else if (build_context.cross_compiling && build_context.different_os) {
 		gb_printf_err("Linking for cross compilation for this platform is not yet supported (%.*s %.*s)\n",
 			LIT(target_os_names[build_context.metrics.os]),

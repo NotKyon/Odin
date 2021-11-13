@@ -1505,6 +1505,8 @@ lbValue lb_emit_mul_add(lbProcedure *p, lbValue a, lbValue b, lbValue c, Type *t
 		case TargetArch_386:
 		case TargetArch_wasm32:
 		case TargetArch_wasm64:
+		case TargetArch_ps2_ee:
+		case TargetArch_ps2_iop:
 			is_possible = false;
 			break;
 		}

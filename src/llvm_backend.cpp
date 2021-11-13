@@ -794,6 +794,8 @@ lbProcedure *lb_create_main_procedure(lbModule *m, lbProcedure *startup_runtime)
 		params->Tuple.variables[1] = alloc_entity_param(nullptr, make_token_ident("argv"), t_ptr_cstring, false, true);
 	}
 
+	// FIXME(NotKyon): PS2SDK CRT stuff?
+
 	slice_init(&results->Tuple.variables, permanent_allocator(), 1);
 	results->Tuple.variables[0] = alloc_entity_param(nullptr, blank_token, t_i32, false, true);
 

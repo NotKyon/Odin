@@ -497,6 +497,8 @@ bool lb_is_matrix_simdable(Type *t) {
 	case TargetArch_386:
 	case TargetArch_wasm32:
 	case TargetArch_wasm64:
+	case TargetArch_ps2_ee:
+	case TargetArch_ps2_iop:
 		// nope
 		return false;
 	}
@@ -515,6 +517,8 @@ bool lb_is_matrix_simdable(Type *t) {
 			case TargetArch_386:
 			case TargetArch_wasm32:
 			case TargetArch_wasm64:
+			case TargetArch_ps2_ee:
+			case TargetArch_ps2_iop:
 				return false;
 			}
 		}

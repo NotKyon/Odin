@@ -18,6 +18,7 @@ enum TargetOsKind {
 	TargetOs_freebsd,
 	
 	TargetOs_wasi,
+	TargetOs_ps2,
 
 	TargetOs_freestanding,
 
@@ -32,6 +33,8 @@ enum TargetArchKind {
 	TargetArch_arm64,
 	TargetArch_wasm32,
 	TargetArch_wasm64,
+	TargetArch_ps2_ee,
+	TargetArch_ps2_iop,
 
 	TargetArch_COUNT,
 };
@@ -54,6 +57,7 @@ String target_os_names[TargetOs_COUNT] = {
 	str_lit("freebsd"),
 	
 	str_lit("wasi"),
+	str_lit("ps2"),
 
 	str_lit("freestanding"),
 };
@@ -65,6 +69,8 @@ String target_arch_names[TargetArch_COUNT] = {
 	str_lit("arm64"),
 	str_lit("wasm32"),
 	str_lit("wasm64"),
+	str_lit("ee"),
+	str_lit("iop"),
 };
 
 String target_endian_names[TargetEndian_COUNT] = {
@@ -75,6 +81,8 @@ String target_endian_names[TargetEndian_COUNT] = {
 
 TargetEndianKind target_endians[TargetArch_COUNT] = {
 	TargetEndian_Invalid,
+	TargetEndian_Little,
+	TargetEndian_Little,
 	TargetEndian_Little,
 	TargetEndian_Little,
 	TargetEndian_Little,
@@ -362,6 +370,24 @@ gb_global TargetMetrics target_wasi_wasm32 = {
 	str_lit(""),
 };
 
+gb_global TargetMetrics target_ps2_ee = {
+	TargetOs_ps2,
+	TargetArch_ps2_ee,
+	4,
+	8,
+	str_lit("mips64r5900el-unknown-none-elf"),
+	str_lit(""),
+};
+
+gb_global TargetMetrics target_ps2_iop = {
+	TargetOs_ps2,
+	TargetArch_ps2_iop,
+	4,
+	8,
+	str_lit("mipsel-unknown-none-elf"),
+	str_lit(""),
+};
+
 
 
 
@@ -384,6 +410,8 @@ gb_global NamedTargetMetrics named_targets[] = {
 	{ str_lit("freestanding_wasm32"), &target_freestanding_wasm32 },
 	// { str_lit("freestanding_wasm64"), &target_freestanding_wasm64 },
 	{ str_lit("wasi_wasm32"), &target_wasi_wasm32 },
+	{ str_lit("ps2_ee"),         &target_ps2_ee         },
+	{ str_lit("ps2_iop"),        &target_ps2_iop        },
 };
 
 NamedTargetMetrics *selected_target_metrics;
@@ -946,6 +974,8 @@ void init_build_context(TargetMetrics *cross_target) {
 		
 		// Disallow on wasm
 		build_context.use_separate_modules = false;
+	} else if (bc->metrics.os == TargetOs_ps2) {
+		bc->link_flags = str_lit("-arch mips64el "); // FIXME(NotKyon): What should these be for PS2, with all its mixed files?
 	} else {
 		gb_printf_err("Compiler Error: Unsupported architecture\n");
 		gb_exit(1);

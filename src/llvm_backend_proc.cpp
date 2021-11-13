@@ -1383,6 +1383,11 @@ lbValue lb_build_builtin_proc(lbProcedure *p, Ast *expr, TypeAndValue const &tv,
 			LLVMValueRef the_asm = llvm_get_inline_asm(func_type, str_lit("yield"), {});
 			GB_ASSERT(the_asm != nullptr);
 			LLVMBuildCall2(p->builder, func_type, the_asm, nullptr, 0, "");
+		} else if (build_context.metrics.os == TargetOs_ps2) {
+			LLVMTypeRef func_type = LLVMFunctionType(LLVMVoidTypeInContext(p->module->ctx), nullptr, 0, false);
+			LLVMValueRef the_asm = llvm_get_inline_asm(func_type, str_lit("nop"), {});
+			GB_ASSERT(the_asm != nullptr);
+			LLVMBuildCall2(p->builder, func_type, the_asm, nullptr, 0, "");
 		}
 		return {};
 
